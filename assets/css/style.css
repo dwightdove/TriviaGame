@@ -4,3 +4,10 @@ body {
 	background-image: url('../images/swirls.png');
 	font-family: 'Walter Turncoat', cursive;
 }
+
+#question-text,
+.progress ,
+.btn-answer {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
