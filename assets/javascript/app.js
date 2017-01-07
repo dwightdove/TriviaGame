@@ -1,7 +1,9 @@
 var questions;
 var numCorrect = 0;
 var currentQuestion = 0;
-var timer;
+var timerNewGame;
+var timerNewQuestion;
+var timerNextQuestion;
 
 var TIMEOUT_QUESTION = 10000;
 var TIMEOUT_NEW_GAME = 5000;
@@ -9,7 +11,9 @@ var TIMEOUT_NEXT_QUESTION = 3000;
 var NUM_QUESTIONS = 5;
 
 function handleButtonClick(button) {
-	//todo: cancel timer
+	// cancel timer
+	clearTimeout(timerNextQuestion);
+	clearInterval(intervalNextQuestion);
 
 	// show answer
 	if (button.html() === questions[currentQuestion].correct_answer) {
@@ -28,16 +32,30 @@ function handleButtonClick(button) {
 	setTimeout(nextQuestion, TIMEOUT_NEXT_QUESTION);
 }
 
+function showAnswer() {
+	$('.btn-answer').each(function() {
+		var currentButton = $(this);
+		if (currentButton.html() === questions[currentQuestion].correct_answer) {
+			currentButton.toggleClass('btn-success');
+		}
+	});
+	
+	setTimeout(nextQuestion, TIMEOUT_NEXT_QUESTION);
+}
+
 function nextQuestion() {
 	currentQuestion++;
 	loadQuestion(currentQuestion);
 }
 
 function showScore() {
-	$('#num-correct').html(numCorrect);
-	$('#num-questions').html(NUM_QUESTIONS);
+	$('#number-correct').html(numCorrect);
+	$('#number-questions').html(NUM_QUESTIONS);
 	$('#row-score').show();
 	$('#row-question').hide();
+
+	// start reset timer
+	setTimeout(resetGame, TIMEOUT_NEW_GAME);
 }
 
 function loadQuestion(index) {
@@ -62,7 +80,19 @@ function loadQuestion(index) {
 	$('#answer-3').html(questions[index].answers[2]);
 	$('#answer-4').html(questions[index].answers[3]);
 
-	//todo: start timer
+	// start timers
+	progressNextQuestion = 100;
+	intervalNextQuestion = setInterval(updateProgressNextQuestion, 1000);
+	timerNextQuestion = setTimeout(showAnswer, TIMEOUT_QUESTION);
+}
+
+function updateProgressNextQuestion() {
+	progressNextQuestion-=10;
+	$('#progress-question').css('width', progressNextQuestion + '%');
+
+	if (progressNextQuestion < 10) {
+		clearInterval(intervalNextQuestion);
+	}
 }
 
 function resetGame() {
