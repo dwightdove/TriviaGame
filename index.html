@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Trivia Title Here</title>
+	<title>Timed Trivia</title>
 	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
@@ -18,7 +18,7 @@
 			<div class="well">
 				<div class="row">
 					<div class="col-xs-12">
-						<h1 class="text-center">Trivia Title Here</h1>
+						<h1 class="text-center">Timed Trivia</h1>
 					</div>
 				</div> <!-- end title row -->
 				<div class="row" id="row-start">
@@ -53,6 +53,11 @@
 								<div class="btn btn-default btn-block btn-answer" id="answer-4">ANSWER_4</div>
 							</div>
 						</div> <!-- end answer 4 -->
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+								<p id="game-message"></p>
+							</div>
+						</div> <!-- end update row -->
 						<div class="row">	
 							<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
 								<div class="progress">	
@@ -67,15 +72,12 @@
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
 								<h3 class="text-center">Game Over</h3>
-								<p>You answered <span id="number-correct">X</span> questions correctly out of <span id="number-questions">Y</span>.</p>
-								<p>Please hold while we reset the game...</p>
+								<p>You answered <span id="number-correct"></span> question(s) correctly and <span id="number-incorrect"></span> question(s) incorrectly out of <span id="number-questions"></span> total questions.</p>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
-								<div class="progress">
-									<div class="progress-bar" id="progress-reset" style="width:100%"></div>
-								</div>
+							<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
+								<div class="btn btn-primary btn-block" id="btn-reset">Play Again!</div>
 							</div>
 						</div>
 					</div>

@@ -1,14 +1,16 @@
 var questions;
 var numCorrect = 0;
 var currentQuestion = 0;
-var timerNewGame;
-var timerNewQuestion;
 var timerNextQuestion;
+var progressNextQuestion;
+var intervalNextQuestion;
 
 var TIMEOUT_QUESTION = 10000;
-var TIMEOUT_NEW_GAME = 5000;
 var TIMEOUT_NEXT_QUESTION = 3000;
 var NUM_QUESTIONS = 5;
+var MESSAGE_CORRECT = 'Correct!';
+var MESSAGE_INCORRECT = 'Wrong!';
+var MESSAGE_TIME_UP = "Time's Up!";
 
 function handleButtonClick(button) {
 	// cancel timer
@@ -18,6 +20,7 @@ function handleButtonClick(button) {
 	// show answer
 	if (button.html() === questions[currentQuestion].correct_answer) {
 		button.toggleClass('btn-success');
+		$('#game-message').html(MESSAGE_CORRECT);
 		numCorrect++;
 	} else {
 		button.toggleClass('btn-danger');
@@ -27,6 +30,7 @@ function handleButtonClick(button) {
 				currentButton.toggleClass('btn-success');
 			}
 		});
+		$('#game-message').html(MESSAGE_INCORRECT);
 	}
 
 	setTimeout(nextQuestion, TIMEOUT_NEXT_QUESTION);
@@ -39,7 +43,9 @@ function showAnswer() {
 			currentButton.toggleClass('btn-success');
 		}
 	});
-	
+
+	$('#game-message').html(MESSAGE_TIME_UP);
+
 	setTimeout(nextQuestion, TIMEOUT_NEXT_QUESTION);
 }
 
@@ -50,12 +56,10 @@ function nextQuestion() {
 
 function showScore() {
 	$('#number-correct').html(numCorrect);
+	$('#number-incorrect').html(NUM_QUESTIONS - numCorrect);
 	$('#number-questions').html(NUM_QUESTIONS);
 	$('#row-score').show();
 	$('#row-question').hide();
-
-	// start reset timer
-	setTimeout(resetGame, TIMEOUT_NEW_GAME);
 }
 
 function loadQuestion(index) {
@@ -80,6 +84,9 @@ function loadQuestion(index) {
 	$('#answer-3').html(questions[index].answers[2]);
 	$('#answer-4').html(questions[index].answers[3]);
 
+	// clear message
+	$('#game-message').html('');
+
 	// start timers
 	progressNextQuestion = 100;
 	intervalNextQuestion = setInterval(updateProgressNextQuestion, 1000);
@@ -88,7 +95,19 @@ function loadQuestion(index) {
 
 function updateProgressNextQuestion() {
 	progressNextQuestion-=10;
-	$('#progress-question').css('width', progressNextQuestion + '%');
+	var className = 'progress-bar';
+
+	if (progressNextQuestion < 40) {
+		className += ' progress-bar-danger';
+	} else if (progressNextQuestion < 80) {
+		className += ' progress-bar-warning';
+	} else {
+		className += ' progress-bar-success';
+	}
+
+	$('#progress-question')
+		.attr('class', className)
+		.css('width', progressNextQuestion + '%');
 
 	if (progressNextQuestion < 10) {
 		clearInterval(intervalNextQuestion);
@@ -141,4 +160,6 @@ $(document).ready(function () {
 	});
 
 	$('#btn-start').on('click', resetGame);
+
+	$('#btn-reset').on('click', resetGame);
 });
